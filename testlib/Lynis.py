@@ -1,6 +1,8 @@
 #/bin/Python
 import subprocess
 import argparse, sys
+import pexpect
+
 
 LYNIS_URL="https://github.com/CISOfy/lynis"
 
@@ -12,6 +14,16 @@ def m_git_clone_Lynis():
     
 def m_rm_Lynis():
     rm_lynis = subprocess.run(["rm", "-rf", "lynis"])
+    
+    
+def m_run_Lynis_Full():
+    '''Requirement:Pexpect'''
+    '''Todo implement execution no pexpect'''
+    LynisFull_Child= pexpect.spawn('/bin/bash -c "cd lynis && ./lynis audit system > ../LynisTestReport.txt"')
+    
+    #Interesting code could be put here
+    LynisFull_Child.expect(pexpect.EOF, timeout=None)
+    
     
 
 def main():
@@ -31,6 +43,10 @@ def main():
         m_git_clone_Lynis()
         print("...Done Cloning")
     elif args.run:
+        if (args.run == 'FULL'):
+            print("Executing Lynis Suite, Generating Report....")
+            m_run_Lynis_Full()
+            print("Done")
         pass
     
 if __name__ == '__main__':
